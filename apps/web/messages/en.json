@@ -16,5 +16,75 @@
   "errors": {
     "slot_taken": "That slot is no longer available. Please pick another time.",
     "generic": "Something went wrong. Please try again."
+  },
+  "owner": {
+    "login": {
+      "title": "Owner sign in",
+      "subtitle": "Enter your email and we'll send you a one-time code.",
+      "email_label": "Email",
+      "email_placeholder": "owner@example.com",
+      "send_code": "Send code",
+      "sending": "Sending…",
+      "code_label": "One-time code",
+      "code_placeholder": "6-digit code",
+      "sent_to": "We sent a code to {email}.",
+      "verify": "Sign in",
+      "verifying": "Signing in…",
+      "use_other_email": "Use a different email",
+      "error_send": "We couldn't send a code to that email. Check it and try again.",
+      "error_invalid": "That code is incorrect or expired. Please try again.",
+      "error_not_owner": "This account is not registered as an owner."
+    },
+    "nav": {
+      "brand": "My Barber",
+      "services": "Services",
+      "sign_out": "Sign out"
+    },
+    "services": {
+      "title": "Services",
+      "subtitle": "Manage the services your shop offers.",
+      "add": "Add service",
+      "empty": "No services yet. Add your first one.",
+      "col_name": "Name",
+      "col_duration": "Duration",
+      "col_price": "Price",
+      "col_tax": "Tax",
+      "col_status": "Status",
+      "col_actions": "Actions",
+      "edit": "Edit",
+      "archive": "Archive",
+      "restore": "Restore",
+      "status_active": "Active",
+      "status_archived": "Archived",
+      "minutes": "{n} min",
+      "tax_OMR_VAT_STANDARD": "VAT 5%",
+      "tax_OMR_VAT_ZERO": "Zero-rated",
+      "tax_OMR_VAT_EXEMPT": "Exempt",
+      "form": {
+        "new_title": "New service",
+        "edit_title": "Edit service",
+        "name_ar": "Name (Arabic)",
+        "name_en": "Name (English)",
+        "duration_min": "Duration (minutes)",
+        "buffer_before_min": "Buffer before (minutes)",
+        "buffer_after_min": "Buffer after (minutes)",
+        "price_minor": "Price (baisa)",
+        "price_hint": "1 OMR = 1000 baisa. {preview}",
+        "tax_code": "Tax treatment",
+        "save": "Save service",
+        "saving": "Saving…",
+        "cancel": "Cancel"
+      },
+      "errors": {
+        "name_ar": "Enter an Arabic name.",
+        "name_en": "Enter an English name.",
+        "duration_min": "Duration must be between 1 and 480 minutes.",
+        "buffer_before_min": "Buffer must be zero or more minutes.",
+        "buffer_after_min": "Buffer must be zero or more minutes.",
+        "price_minor": "Price must be a whole number of baisa (0 or more).",
+        "tax_code": "Choose a tax treatment.",
+        "save_failed": "We couldn't save the service. Please try again."
+      }
+    }
   }
 }

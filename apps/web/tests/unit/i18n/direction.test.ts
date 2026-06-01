@@ -11,8 +11,7 @@ describe("getDirection", () => {
   });
 
   it("falls back to the default locale's direction for an unknown locale", () => {
-    // DEFAULT_LOCALE is 'ar' -> 'rtl'
-    // @ts-expect-error — runtime fallback must not crash on bad input
+    // DEFAULT_LOCALE is 'ar' -> 'rtl'. Bad input must not crash.
     expect(getDirection("zz")).toBe("rtl");
   });
 });

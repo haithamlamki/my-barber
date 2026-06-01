@@ -24,8 +24,8 @@ export default async function LocaleLayout({
   const dir = getDirection(locale);
 
   return (
-    <html lang={locale} dir={dir}>
-      <body className="bg-canvas text-ink font-sans">
+    <html lang={locale} dir={dir} suppressHydrationWarning>
+      <body className="bg-canvas text-ink font-sans" suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>
