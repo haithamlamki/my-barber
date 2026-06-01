@@ -7,6 +7,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "."),
+      // `server-only` is a build-time guard that throws when bundled for the
+      // client. In unit tests it has no runtime meaning, so stub it out.
+      "server-only": path.resolve(__dirname, "tests/stubs/empty.ts"),
     },
   },
   test: {
@@ -28,6 +31,16 @@ export default defineConfig({
         "lib/**/*.test.tsx",
         "lib/db/database.types.ts",
         "lib/**/*.d.ts",
+        // Type-only modules: no runtime code to exercise.
+        "lib/**/types.ts",
+        // Framework wiring with no business branches: construct a Supabase/
+        // next-intl client from already-tested env (lib/supabase/env.ts) plus
+        // Next-mandated cookie/SSR plumbing. Exercised end-to-end by the
+        // owner-* Playwright journeys; nothing here is unit-testable without
+        // mocking the framework itself.
+        "lib/supabase/client.ts",
+        "lib/supabase/server.ts",
+        "lib/i18n/request.ts",
       ],
       thresholds: {
         // Global gates for lib/.
