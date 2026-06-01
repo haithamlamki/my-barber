@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html {
+    background-color: theme(colors.canvas);
+    color: theme(colors.ink);
+    font-family: theme(fontFamily.sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    min-height: 100vh;
+    background-color: theme(colors.canvas);
+  }
+  :focus-visible {
+    outline: 2px solid theme(colors.ink);
+    outline-offset: 2px;
+    border-radius: theme(borderRadius.sm);
+  }
+}

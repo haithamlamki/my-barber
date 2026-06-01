@@ -1,0 +1,20 @@
+{
+  "home": {
+    "title": "My Barber",
+    "tagline": "Book the best barbers in Oman — one tap, your language, your time.",
+    "cta_book": "Book now"
+  },
+  "common": {
+    "locale_switch_to_en": "English",
+    "locale_switch_to_ar": "العربية",
+    "loading": "Loading…",
+    "back": "Back",
+    "next": "Next",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "errors": {
+    "slot_taken": "That slot is no longer available. Please pick another time.",
+    "generic": "Something went wrong. Please try again."
+  }
+}

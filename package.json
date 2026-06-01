@@ -1,0 +1,23 @@
+{
+  "name": "my-barber",
+  "version": "0.1.0",
+  "private": true,
+  "description": "حلاقي My Barber — Oman-only barber operating system",
+  "packageManager": "pnpm@10.33.4",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "test": "pnpm --filter web test",
+    "test:coverage": "pnpm --filter web test:coverage",
+    "test:e2e": "pnpm --filter web test:e2e",
+    "lint": "pnpm --filter web lint",
+    "typecheck": "pnpm --filter web typecheck",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:status": "supabase status",
+    "db:reset": "supabase db reset",
+    "db:migrate": "supabase db reset",
+    "db:seed": "psql \"$SUPABASE_DB_URL\" -f supabase/seed.sql",
+    "db:types": "supabase gen types typescript --local > apps/web/lib/db/database.types.ts"
+  }
+}
