@@ -38,6 +38,7 @@
     "nav": {
       "brand": "حلاقي",
       "services": "الخدمات",
+      "staff": "الحلاقون",
       "sign_out": "تسجيل الخروج"
     },
     "services": {
@@ -71,6 +72,8 @@
         "price_minor": "السعر (بيسة)",
         "price_hint": "١ ريال = ١٠٠٠ بيسة. {preview}",
         "tax_code": "المعاملة الضريبية",
+        "image": "صورة (اختياري)",
+        "image_hint": "JPG أو PNG أو WebP، بحد أقصى ٢ ميجابايت.",
         "save": "حفظ الخدمة",
         "saving": "جارٍ الحفظ…",
         "cancel": "إلغاء"
@@ -83,7 +86,74 @@
         "buffer_after_min": "يجب أن يكون الفاصل صفرًا أو أكثر.",
         "price_minor": "يجب أن يكون السعر رقمًا صحيحًا بالبيسة (٠ أو أكثر).",
         "tax_code": "اختر المعاملة الضريبية.",
+        "image_type": "استخدم صورة بصيغة JPG أو PNG أو WebP.",
+        "image_size": "يجب ألا يتجاوز حجم الصورة ٢ ميجابايت.",
         "save_failed": "تعذّر حفظ الخدمة. الرجاء المحاولة مرة أخرى."
+      }
+    },
+    "staff": {
+      "title": "الحلاقون",
+      "subtitle": "أدر الحلاقين والخدمات التي يقدّمونها.",
+      "add": "إضافة حلاق",
+      "empty": "لا يوجد حلاقون بعد. أضف أول حلاق.",
+      "col_name": "الاسم",
+      "col_employment": "نوع التوظيف",
+      "col_services": "الخدمات",
+      "col_status": "الحالة",
+      "col_actions": "إجراءات",
+      "edit": "تعديل",
+      "assign_services": "الخدمات",
+      "archive": "أرشفة",
+      "restore": "استعادة",
+      "status_active": "نشط",
+      "status_archived": "مؤرشف",
+      "services_all": "كل الخدمات",
+      "services_count": "{n} مختارة",
+      "employment_employee": "موظف",
+      "employment_chair_rent": "إيجار كرسي",
+      "employment_commission_only": "بالعمولة فقط",
+      "lang": {
+        "ar": "العربية",
+        "en": "الإنجليزية",
+        "hi": "الهندية",
+        "ur": "الأردية"
+      },
+      "form": {
+        "new_title": "حلاق جديد",
+        "edit_title": "تعديل الحلاق",
+        "display_name": "الاسم المعروض",
+        "email": "بريد تسجيل الدخول",
+        "email_placeholder": "barber@example.com",
+        "bio_ar": "نبذة (بالعربية)",
+        "bio_en": "نبذة (بالإنجليزية)",
+        "employment_type": "نوع التوظيف",
+        "languages": "اللغات",
+        "image": "صورة (اختياري)",
+        "image_hint": "JPG أو PNG أو WebP، بحد أقصى ٢ ميجابايت.",
+        "save": "حفظ الحلاق",
+        "saving": "جارٍ الحفظ…",
+        "cancel": "إلغاء"
+      },
+      "assign": {
+        "title": "تعيين الخدمات",
+        "subtitle": "اختر الخدمات التي يمكن أن يقدّمها {name}.",
+        "all_services": "يقدّم كل الخدمات",
+        "specific_services": "خدمات محدّدة",
+        "no_services": "أضف خدمة أولًا ثم عيّنها هنا.",
+        "save": "حفظ",
+        "saving": "جارٍ الحفظ…",
+        "cancel": "إلغاء"
+      },
+      "errors": {
+        "display_name": "أدخل الاسم المعروض.",
+        "email": "أدخل بريدًا إلكترونيًا صحيحًا.",
+        "taken": "هذا البريد مستخدم بالفعل.",
+        "invalid": "أدخل بريدًا إلكترونيًا صحيحًا.",
+        "employment_type": "اختر نوع التوظيف.",
+        "languages": "اختر لغة واحدة على الأقل.",
+        "image_type": "استخدم صورة بصيغة JPG أو PNG أو WebP.",
+        "image_size": "يجب ألا يتجاوز حجم الصورة ٢ ميجابايت.",
+        "save_failed": "تعذّر حفظ الحلاق. الرجاء المحاولة مرة أخرى."
       }
     }
   }

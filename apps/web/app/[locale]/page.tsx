@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { isLocale } from "@/lib/i18n/locales";
 import { notFound } from "next/navigation";
+import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 
 export default async function HomePage({
   params,
@@ -15,6 +16,9 @@ export default async function HomePage({
 
   return (
     <main className="min-h-screen bg-canvas">
+      <header className="flex items-center justify-end px-lg py-sm md:px-section">
+        <LocaleSwitcher current={locale} />
+      </header>
       <section className="px-lg py-section md:px-section">
         <h1 className="text-display-lg text-ink font-display">{t("title")}</h1>
         <p className="mt-lg text-body-md text-body max-w-xl">{t("tagline")}</p>

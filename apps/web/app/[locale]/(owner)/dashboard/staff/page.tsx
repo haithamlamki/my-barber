@@ -1,13 +1,13 @@
 import { notFound, redirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { isLocale } from "@/lib/i18n/locales";
-import { formatOMR } from "@/lib/i18n/money";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getOwnerContext } from "@/lib/auth/owner";
 import { signedImageUrls } from "@/lib/storage/upload";
-import { setServiceStatus } from "./actions";
+import { normalizeServiceScope } from "@/lib/staff/schema";
+import { setStaffStatus } from "./actions";
 
-export default async function ServicesPage({
+export default async function StaffPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
@@ -20,19 +20,19 @@ export default async function ServicesPage({
   if (!owner) redirect(`/${locale}/login`);
 
   const supabase = await createSupabaseServerClient();
-  const { data: services } = await supabase
-    .from("services")
+  const { data: staff } = await supabase
+    .from("staff_profiles")
     .select(
-      "id, name_ar, name_en, duration_min, price_minor, tax_code, status, image_path",
+      "id, display_name, employment_type, status, image_path, staff_assignments(service_scope_json)",
     )
     .eq("business_id", owner.businessId)
     .order("created_at", { ascending: true });
 
-  const t = await getTranslations("owner.services");
-  const rows = services ?? [];
+  const t = await getTranslations("owner.staff");
+  const rows = staff ?? [];
   const imageUrls = await signedImageUrls(
     supabase,
-    rows.map((s) => s.image_path).filter((p): p is string => Boolean(p)),
+    rows.map((m) => m.image_path).filter((p): p is string => Boolean(p)),
   );
 
   return (
@@ -43,7 +43,7 @@ export default async function ServicesPage({
           <p className="mt-xxs text-body-sm text-muted">{t("subtitle")}</p>
         </div>
         <a
-          href={`/${locale}/dashboard/services/new`}
+          href={`/${locale}/dashboard/staff/new`}
           className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-lg text-button text-on-primary hover:bg-primary-active transition-colors"
         >
           {t("add")}
@@ -60,20 +60,23 @@ export default async function ServicesPage({
             <thead>
               <tr className="border-b border-hairline bg-surface-soft text-start">
                 <th className="px-md py-sm text-start text-caption text-muted">{t("col_name")}</th>
-                <th className="px-md py-sm text-start text-caption text-muted">{t("col_duration")}</th>
-                <th className="px-md py-sm text-start text-caption text-muted">{t("col_price")}</th>
-                <th className="px-md py-sm text-start text-caption text-muted">{t("col_tax")}</th>
+                <th className="px-md py-sm text-start text-caption text-muted">{t("col_employment")}</th>
+                <th className="px-md py-sm text-start text-caption text-muted">{t("col_services")}</th>
                 <th className="px-md py-sm text-start text-caption text-muted">{t("col_status")}</th>
                 <th className="px-md py-sm text-end text-caption text-muted">{t("col_actions")}</th>
               </tr>
             </thead>
             <tbody>
-              {rows.map((service) => {
-                const name = locale === "ar" ? service.name_ar : service.name_en;
-                const isActive = service.status === "active";
-                const imageUrl = service.image_path ? imageUrls.get(service.image_path) : null;
+              {rows.map((member) => {
+                const isActive = member.status === "active";
+                const assignment = member.staff_assignments?.[0];
+                const scope = normalizeServiceScope(assignment?.service_scope_json);
+                const servicesLabel = scope.all
+                  ? t("services_all")
+                  : t("services_count", { n: scope.service_ids.length });
+                const imageUrl = member.image_path ? imageUrls.get(member.image_path) : null;
                 return (
-                  <tr key={service.id} className="border-b border-hairline-soft last:border-b-0">
+                  <tr key={member.id} className="border-b border-hairline-soft last:border-b-0">
                     <td className="px-md py-sm">
                       <div className="flex items-center gap-sm">
                         {imageUrl ? (
@@ -81,29 +84,22 @@ export default async function ServicesPage({
                           <img
                             src={imageUrl}
                             alt=""
-                            className="size-9 rounded-md border border-hairline object-cover"
+                            className="size-9 rounded-full border border-hairline object-cover"
                           />
                         ) : (
-                          <div className="size-9 rounded-md bg-surface-soft" />
+                          <div className="size-9 rounded-full bg-surface-soft" />
                         )}
-                        <span className="text-body-sm text-ink">{name}</span>
+                        <span className="text-body-sm text-ink">{member.display_name}</span>
                       </div>
                     </td>
                     <td className="px-md py-sm text-body-sm text-body">
-                      {t("minutes", { n: service.duration_min })}
+                      {t(`employment_${member.employment_type}` as "employment_employee")}
                     </td>
-                    <td className="px-md py-sm text-body-sm text-body" dir="ltr">
-                      {formatOMR(service.price_minor, locale)}
-                    </td>
-                    <td className="px-md py-sm text-body-sm text-body">
-                      {t(`tax_${service.tax_code}` as "tax_OMR_VAT_STANDARD")}
-                    </td>
+                    <td className="px-md py-sm text-body-sm text-body">{servicesLabel}</td>
                     <td className="px-md py-sm">
                       <span
                         className={`inline-flex items-center rounded-pill px-sm py-xxs text-caption ${
-                          isActive
-                            ? "bg-surface-card text-ink"
-                            : "bg-surface-soft text-muted"
+                          isActive ? "bg-surface-card text-ink" : "bg-surface-soft text-muted"
                         }`}
                       >
                         {isActive ? t("status_active") : t("status_archived")}
@@ -112,14 +108,20 @@ export default async function ServicesPage({
                     <td className="px-md py-sm">
                       <div className="flex items-center justify-end gap-sm">
                         <a
-                          href={`/${locale}/dashboard/services/${service.id}/edit`}
+                          href={`/${locale}/dashboard/staff/${member.id}/services`}
+                          className="text-caption text-body hover:text-ink transition-colors"
+                        >
+                          {t("assign_services")}
+                        </a>
+                        <a
+                          href={`/${locale}/dashboard/staff/${member.id}/edit`}
                           className="text-caption text-body hover:text-ink transition-colors"
                         >
                           {t("edit")}
                         </a>
-                        <form action={setServiceStatus}>
+                        <form action={setStaffStatus}>
                           <input type="hidden" name="locale" value={locale} />
-                          <input type="hidden" name="id" value={service.id} />
+                          <input type="hidden" name="id" value={member.id} />
                           <input
                             type="hidden"
                             name="status"

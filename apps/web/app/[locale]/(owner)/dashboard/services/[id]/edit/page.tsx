@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { isLocale } from "@/lib/i18n/locales";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { signedImageUrl } from "@/lib/storage/upload";
 import { ServiceForm } from "../../ServiceForm";
 import { updateService } from "../../actions";
 
@@ -18,7 +19,7 @@ export default async function EditServicePage({
   const { data: service } = await supabase
     .from("services")
     .select(
-      "id, name_ar, name_en, duration_min, buffer_before_min, buffer_after_min, price_minor, tax_code",
+      "id, name_ar, name_en, duration_min, buffer_before_min, buffer_after_min, price_minor, tax_code, image_path",
     )
     .eq("id", id)
     .maybeSingle();
@@ -27,6 +28,7 @@ export default async function EditServicePage({
 
   const t = await getTranslations("owner.services.form");
   const action = updateService.bind(null, service.id);
+  const imageUrl = await signedImageUrl(supabase, service.image_path);
 
   return (
     <section>
@@ -36,6 +38,7 @@ export default async function EditServicePage({
           locale={locale}
           action={action}
           cancelHref={`/${locale}/dashboard/services`}
+          imageUrl={imageUrl}
           defaults={{
             name_ar: service.name_ar,
             name_en: service.name_en,

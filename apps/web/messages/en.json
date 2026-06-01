@@ -38,6 +38,7 @@
     "nav": {
       "brand": "My Barber",
       "services": "Services",
+      "staff": "Barbers",
       "sign_out": "Sign out"
     },
     "services": {
@@ -71,6 +72,8 @@
         "price_minor": "Price (baisa)",
         "price_hint": "1 OMR = 1000 baisa. {preview}",
         "tax_code": "Tax treatment",
+        "image": "Photo (optional)",
+        "image_hint": "JPG, PNG or WebP, up to 2MB.",
         "save": "Save service",
         "saving": "Saving…",
         "cancel": "Cancel"
@@ -83,7 +86,74 @@
         "buffer_after_min": "Buffer must be zero or more minutes.",
         "price_minor": "Price must be a whole number of baisa (0 or more).",
         "tax_code": "Choose a tax treatment.",
+        "image_type": "Use a JPG, PNG or WebP image.",
+        "image_size": "Image must be 2MB or smaller.",
         "save_failed": "We couldn't save the service. Please try again."
+      }
+    },
+    "staff": {
+      "title": "Barbers",
+      "subtitle": "Manage your barbers and what they can do.",
+      "add": "Add barber",
+      "empty": "No barbers yet. Add your first one.",
+      "col_name": "Name",
+      "col_employment": "Employment",
+      "col_services": "Services",
+      "col_status": "Status",
+      "col_actions": "Actions",
+      "edit": "Edit",
+      "assign_services": "Services",
+      "archive": "Archive",
+      "restore": "Restore",
+      "status_active": "Active",
+      "status_archived": "Archived",
+      "services_all": "All services",
+      "services_count": "{n} selected",
+      "employment_employee": "Employee",
+      "employment_chair_rent": "Chair rent",
+      "employment_commission_only": "Commission only",
+      "lang": {
+        "ar": "Arabic",
+        "en": "English",
+        "hi": "Hindi",
+        "ur": "Urdu"
+      },
+      "form": {
+        "new_title": "New barber",
+        "edit_title": "Edit barber",
+        "display_name": "Display name",
+        "email": "Login email",
+        "email_placeholder": "barber@example.com",
+        "bio_ar": "Bio (Arabic)",
+        "bio_en": "Bio (English)",
+        "employment_type": "Employment type",
+        "languages": "Languages",
+        "image": "Photo (optional)",
+        "image_hint": "JPG, PNG or WebP, up to 2MB.",
+        "save": "Save barber",
+        "saving": "Saving…",
+        "cancel": "Cancel"
+      },
+      "assign": {
+        "title": "Assign services",
+        "subtitle": "Choose which services {name} can perform.",
+        "all_services": "Can perform all services",
+        "specific_services": "Specific services",
+        "no_services": "Add a service first, then assign it here.",
+        "save": "Save",
+        "saving": "Saving…",
+        "cancel": "Cancel"
+      },
+      "errors": {
+        "display_name": "Enter a display name.",
+        "email": "Enter a valid email.",
+        "taken": "That email is already in use.",
+        "invalid": "Enter a valid email.",
+        "employment_type": "Choose an employment type.",
+        "languages": "Choose at least one language.",
+        "image_type": "Use a JPG, PNG or WebP image.",
+        "image_size": "Image must be 2MB or smaller.",
+        "save_failed": "We couldn't save the barber. Please try again."
       }
     }
   }

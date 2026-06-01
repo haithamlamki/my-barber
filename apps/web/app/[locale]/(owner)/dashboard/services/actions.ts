@@ -6,6 +6,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getOwnerContext } from "@/lib/auth/owner";
 import { isLocale, DEFAULT_LOCALE, type Locale } from "@/lib/i18n/locales";
 import { parseServiceInput } from "@/lib/services/schema";
+import { uploadBusinessImage } from "@/lib/storage/upload";
 
 export interface ServiceFormState {
   readonly ok: boolean;
@@ -52,9 +53,13 @@ export async function createService(
 
   if (locationError || !location) return { ok: false, errors: { _form: "save_failed" } };
 
+  const upload = await uploadBusinessImage(supabase, owner.businessId, "services", formData.get("image"));
+  if (!upload.ok) return { ok: false, errors: { image: upload.error } };
+
   const { error } = await supabase.from("services").insert({
     business_id: owner.businessId,
     location_id: location.id,
+    image_path: upload.path,
     ...parsed.data,
   });
 
@@ -78,7 +83,12 @@ export async function updateService(
   if (!owner) redirect(`/${locale}/login`);
 
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.from("services").update(parsed.data).eq("id", id);
+
+  const upload = await uploadBusinessImage(supabase, owner.businessId, "services", formData.get("image"));
+  if (!upload.ok) return { ok: false, errors: { image: upload.error } };
+
+  const payload = upload.path ? { ...parsed.data, image_path: upload.path } : parsed.data;
+  const { error } = await supabase.from("services").update(payload).eq("id", id);
 
   if (error) return { ok: false, errors: { _form: "save_failed" } };
 

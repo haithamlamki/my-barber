@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { isLocale } from "@/lib/i18n/locales";
 import { getOwnerContext } from "@/lib/auth/owner";
+import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { signOut } from "./actions";
 
 export default async function DashboardLayout({
@@ -34,17 +35,26 @@ export default async function DashboardLayout({
               >
                 {t("services")}
               </a>
+              <a
+                href={`/${locale}/dashboard/staff`}
+                className="text-nav-link text-body hover:text-ink transition-colors"
+              >
+                {t("staff")}
+              </a>
             </nav>
           </div>
-          <form action={signOut}>
-            <input type="hidden" name="locale" value={locale} />
-            <button
-              type="submit"
-              className="text-nav-link text-muted hover:text-ink transition-colors"
-            >
-              {t("sign_out")}
-            </button>
-          </form>
+          <div className="flex items-center gap-md">
+            <LocaleSwitcher current={locale} />
+            <form action={signOut}>
+              <input type="hidden" name="locale" value={locale} />
+              <button
+                type="submit"
+                className="text-nav-link text-muted hover:text-ink transition-colors"
+              >
+                {t("sign_out")}
+              </button>
+            </form>
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-5xl px-md py-lg">{children}</main>

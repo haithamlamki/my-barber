@@ -32,13 +32,20 @@ interface ServiceFormProps {
   readonly cancelHref: string;
   readonly action: (state: ServiceFormState, formData: FormData) => Promise<ServiceFormState>;
   readonly defaults?: ServiceFormDefaults;
+  readonly imageUrl?: string | null;
 }
 
 const inputClass =
   "h-10 rounded-md border border-hairline bg-canvas px-sm text-body-sm text-ink placeholder:text-muted-soft";
 const labelTextClass = "text-caption text-body";
 
-export function ServiceForm({ locale, cancelHref, action, defaults = EMPTY }: ServiceFormProps) {
+export function ServiceForm({
+  locale,
+  cancelHref,
+  action,
+  defaults = EMPTY,
+  imageUrl = null,
+}: ServiceFormProps) {
   const t = useTranslations("owner.services.form");
   const tErr = useTranslations("owner.services.errors");
   const tTax = useTranslations("owner.services");
@@ -46,12 +53,13 @@ export function ServiceForm({ locale, cancelHref, action, defaults = EMPTY }: Se
     ok: true,
   });
   const [priceMinor, setPriceMinor] = useState(String(defaults.price_minor));
+  const [imagePreview, setImagePreview] = useState<string | null>(imageUrl);
 
   const errors = state.errors ?? {};
   const pricePreview = formatOMR(Number.parseInt(priceMinor || "0", 10) || 0, locale);
 
   return (
-    <form action={formAction} className="flex max-w-lg flex-col gap-md">
+    <form action={formAction} encType="multipart/form-data" className="flex max-w-lg flex-col gap-md">
       <input type="hidden" name="locale" value={locale} />
 
       <Field label={t("name_ar")} error={errors.name_ar && tErr("name_ar")}>
@@ -123,6 +131,28 @@ export function ServiceForm({ locale, cancelHref, action, defaults = EMPTY }: Se
             </option>
           ))}
         </select>
+      </Field>
+
+      <Field label={t("image")} error={errors.image && tErr(errors.image as "image_type")}>
+        {imagePreview && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={imagePreview}
+            alt=""
+            className="size-16 rounded-md border border-hairline object-cover"
+          />
+        )}
+        <input
+          type="file"
+          name="image"
+          accept="image/jpeg,image/png,image/webp"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            setImagePreview(file ? URL.createObjectURL(file) : imageUrl);
+          }}
+          className="text-body-sm text-body file:me-sm file:rounded-md file:border file:border-hairline file:bg-surface-soft file:px-sm file:py-xxs file:text-caption file:text-body"
+        />
+        <span className="text-caption text-muted">{t("image_hint")}</span>
       </Field>
 
       {errors._form && <p className="text-caption text-error">{tErr("save_failed")}</p>}
