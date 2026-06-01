@@ -55,6 +55,20 @@ export default defineConfig({
           branches: 100,
           statements: 100,
         },
+        // Per-module gate: availability/slot math drives bookings -> 100%.
+        "lib/availability/**": {
+          lines: 100,
+          functions: 100,
+          branches: 100,
+          statements: 100,
+        },
+        // Per-module gate: booking domain (state machine, quote, code) -> 100%.
+        "lib/booking/**": {
+          lines: 100,
+          functions: 100,
+          branches: 100,
+          statements: 100,
+        },
       },
     },
   },
