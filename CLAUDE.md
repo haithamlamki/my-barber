@@ -79,3 +79,7 @@ my-barber/
 ## v0.1 scope discipline
 
 The active sprint plan lives in `~/.claude/plans/i-will-share-the-zazzy-koala.md`. v0.1 is a **walking skeleton**: customer guest booking + owner dashboard + Supabase RLS + RTL/LTR i18n + fake providers. **Loudly refuse scope creep** into waitlist, loyalty, gift cards, inventory, multi-location, real Thawani/WhatsApp, Hindi/Urdu, or mobile apps. Those are deferred to v0.2+. If a request seems to expand v0.1, ask the user to confirm before adding it.
+
+## Known issues (v0.2 candidates)
+
+- **Booking race surfaces `save_failed` instead of `slot_taken` on deadlock.** The double-booking guard is the `appointments` EXCLUDE constraint. Under a true concurrent race, Postgres usually aborts the loser with `exclusion_violation` (mapped to the friendly `slot_taken`), but *sometimes* resolves it as a deadlock (`40P01`) instead, which currently falls through to the generic `save_failed` message. Correctness is unaffected — exactly one booking ever wins. v0.2 should detect the deadlock (and retry once) to show `slot_taken`. See the `TODO(v0.2)` at the error-mapping site in `apps/web/app/[locale]/book/actions.ts` (`writeAppointment`).
