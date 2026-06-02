@@ -69,6 +69,20 @@ export default defineConfig({
           branches: 100,
           statements: 100,
         },
+        // Per-module gate: payment adapter guards the integer-baisa invariant -> 100%.
+        "lib/payments/**": {
+          lines: 100,
+          functions: 100,
+          branches: 100,
+          statements: 100,
+        },
+        // Per-module gate: notification adapter is the only confirmation seam -> 100%.
+        "lib/notifications/**": {
+          lines: 100,
+          functions: 100,
+          branches: 100,
+          statements: 100,
+        },
       },
     },
   },
