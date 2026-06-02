@@ -20,18 +20,21 @@ export default async function BookDateTimePage({
   const [{ data: service }, { data: staff }] = await Promise.all([
     supabase
       .from("services")
-      .select("id, name_ar, name_en, duration_min, price_minor, status")
+      .select("id, business_id, name_ar, name_en, duration_min, price_minor, status")
       .eq("id", serviceId)
       .maybeSingle(),
     supabase
       .from("staff_profiles")
-      .select("id, display_name, status")
+      .select("id, business_id, display_name, status")
       .eq("id", staffId)
       .maybeSingle(),
   ]);
 
   if (!service || service.status !== "active") notFound();
   if (!staff || staff.status !== "active") notFound();
+  // Tenant guard: the staff member must belong to the service's business, so a
+  // crafted URL pairing a service with another tenant's staff cannot render.
+  if (staff.business_id !== service.business_id) notFound();
 
   const t = await getTranslations("booking");
   const serviceName = locale === "ar" ? service.name_ar : service.name_en;

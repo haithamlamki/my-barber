@@ -19,12 +19,11 @@ test("guest completes the booking journey and sees a booking code", async ({ pag
   const locale = testInfo.project.name.includes("ar") ? "ar" : "en";
   const dir = locale === "ar" ? "rtl" : "ltr";
 
-  // Step 1 — service. Target the isolated E2E service by URL so the cross-tenant
-  // /book listing (which also shows the demo seed services) stays deterministic.
-  await page.goto(`/${locale}/book`);
+  // Step 1 — service. The /book listing is scoped to the deployment's single
+  // business (NEXT_PUBLIC_BUSINESS_ID), so the isolated E2E tenant's service
+  // does not appear there; reach its detail page by direct URL instead.
+  await page.goto(`/${locale}/book/${E2E_TENANT.service}`);
   await expect(page.locator("html")).toHaveAttribute("dir", dir);
-  await page.locator(`a[href="/${locale}/book/${E2E_TENANT.service}"]`).click();
-  await page.waitForURL(`**/${locale}/book/${E2E_TENANT.service}`);
 
   // Step 2 — barber (the E2E tenant has exactly one public barber at this location).
   await page.locator(`a[href="/${locale}/book/${E2E_TENANT.service}/${E2E_TENANT.staff}"]`).click();

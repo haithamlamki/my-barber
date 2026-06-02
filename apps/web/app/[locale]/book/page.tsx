@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { isLocale } from "@/lib/i18n/locales";
 import { formatOMR } from "@/lib/i18n/money";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getActiveBusinessId } from "@/lib/business/active";
 import { ServiceCard } from "@/components/booking/ServiceCard";
 
 export default async function BookServicePage({
@@ -18,6 +19,7 @@ export default async function BookServicePage({
   const { data: services } = await supabase
     .from("services")
     .select("id, name_ar, name_en, duration_min, price_minor, status")
+    .eq("business_id", getActiveBusinessId())
     .eq("status", "active")
     .order("created_at", { ascending: true });
 
