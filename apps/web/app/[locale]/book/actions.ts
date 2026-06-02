@@ -14,6 +14,9 @@ import {
 } from "@/lib/availability/day";
 import { MINUTES_PER_DAY, muscatLocalToUtc, utcToMuscatLocal } from "@/lib/availability/tz";
 import { quoteService } from "@/lib/booking/quote";
+import { fulfillBooking } from "@/lib/booking/fulfill";
+import { createFakePaymentAdapter } from "@/lib/payments/fake";
+import { createConsoleNotificationAdapter } from "@/lib/notifications/console";
 import { generateBookingCode } from "@/lib/booking/code";
 import { parseBookingInput } from "@/lib/booking/schema";
 import type { BookingInput } from "@/lib/booking/types";
@@ -204,6 +207,39 @@ export async function createBooking(
     totalMinor: quote.totals.totalMinor,
   });
   if (!result.ok) return { ok: false, errors: { _form: result.error } };
+
+  // Post-confirmation side effects: fake payment + console notification. Both
+  // adapters report (never throw), so this can't undo the confirmed appointment.
+  const fulfillment = await fulfillBooking(
+    {
+      payment: createFakePaymentAdapter(),
+      notification: createConsoleNotificationAdapter(),
+    },
+    {
+      bookingCode: result.code,
+      amountMinor: quote.totals.totalMinor,
+      confirmation: {
+        bookingCode: result.code,
+        customerName: input.customerName,
+        customerPhone: input.customerPhone,
+        customerEmail: input.customerEmail ?? null,
+        serviceNameAr: service.nameAr,
+        serviceNameEn: service.nameEn,
+        startsAtIso: startsAt.toISOString(),
+        totalMinor: quote.totals.totalMinor,
+        locale: input.locale,
+      },
+    },
+  );
+
+  // Side effects are best-effort, but a failure is still actionable: surface it on
+  // the server rather than swallowing it. The appointment itself is already confirmed.
+  if (!fulfillment.payment.ok || !fulfillment.notification.ok) {
+    // eslint-disable-next-line no-console -- server-side diagnostics until a logger lands
+    console.warn(
+      `[fulfill] booking ${result.code}: payment=${fulfillment.payment.ok ? "ok" : fulfillment.payment.error} notification=${fulfillment.notification.ok ? "ok" : fulfillment.notification.error}`,
+    );
+  }
 
   redirect(`/${locale}/book/confirmation/${result.code}`);
 }

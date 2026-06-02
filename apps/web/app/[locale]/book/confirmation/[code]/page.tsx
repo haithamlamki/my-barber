@@ -69,6 +69,8 @@ export default async function BookingConfirmationPage({
         <Row label={t("status_label")} value={t("status_confirmed")} />
       </dl>
 
+      <p className="mt-sm text-caption text-muted">{t("notice")}</p>
+
       <Link
         href={`/${locale}`}
         className="mt-lg inline-flex h-10 items-center justify-center rounded-md border border-hairline px-lg text-button text-ink hover:border-ink"
